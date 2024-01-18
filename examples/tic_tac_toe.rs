@@ -45,7 +45,7 @@ struct TicTacToePlugin;
 
 impl Plugin for TicTacToePlugin {
     fn build(&self, app: &mut App) {
-        app.add_state::<GameState>()
+        app.init_state::<GameState>()
             .init_resource::<SymbolFont>()
             .init_resource::<CurrentTurn>()
             .replicate::<Symbol>()
@@ -518,7 +518,7 @@ fn local_player_turn(
 {
     |current_turn, client_transport, players| {
         let client_id = client_transport
-            .map(|client| ClientId::from_raw(client.client_id()))
+            .map(|client| client.client_id())
             .unwrap_or(SERVER_ID);
 
         players

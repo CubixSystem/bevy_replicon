@@ -47,7 +47,7 @@ fn sending_receiving() {
     connect::single_client(&mut server_app, &mut client_app);
 
     let client_transport = client_app.world.resource::<NetcodeClientTransport>();
-    let client_id = ClientId::from_raw(client_transport.client_id());
+    let client_id = client_transport.client_id();
 
     for (mode, events_count) in [
         (SendMode::Broadcast, 1),

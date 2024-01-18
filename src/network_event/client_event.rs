@@ -219,7 +219,7 @@ fn local_resending_system<T: Event>(
         client_events.send(FromClient {
             client_id: SERVER_ID,
             event,
-        })
+        });
     }
 }
 

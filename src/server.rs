@@ -296,8 +296,8 @@ fn collect_changes(
 
         for entity in archetype.entities() {
             for (init_message, update_message, client_info) in messages.iter_mut_with_info() {
-                init_message.start_entity_data(entity.entity());
-                update_message.start_entity_data(entity.entity());
+                init_message.start_entity_data(entity.id());
+                update_message.start_entity_data(entity.id());
                 client_info
                     .visibility_mut()
                     .cache_visibility(entity.entity());
@@ -349,7 +349,7 @@ fn collect_changes(
                         )?;
                     } else {
                         let tick = client_info
-                            .get_change_limit(entity.entity())
+                            .get_change_limit(entity.id())
                             .expect("entity should be present after adding component");
                         if ticks.is_changed(tick, change_tick.this_run()) {
                             update_message.write_component(
@@ -374,7 +374,7 @@ fn collect_changes(
                     // If there is any insertion or we must initialize, include all updates into init message
                     // and bump the last acknowledged tick to keep entity updates atomic.
                     init_message.take_entity_data(update_message)?;
-                    client_info.set_change_limit(entity.entity(), change_tick.this_run());
+                    client_info.set_change_limit(entity.id(), change_tick.this_run());
                 } else {
                     update_message.end_entity_data()?;
                 }
@@ -413,8 +413,8 @@ unsafe fn get_component_unchecked<'w>(
         }
         StorageType::SparseSet => {
             let sparse_set = sparse_sets.get(component_id).unwrap_unchecked();
-            let component = sparse_set.get(entity.entity()).unwrap_unchecked();
-            let ticks = sparse_set.get_ticks(entity.entity()).unwrap_unchecked();
+            let component = sparse_set.get(entity.id()).unwrap_unchecked();
+            let ticks = sparse_set.get_ticks(entity.id()).unwrap_unchecked();
 
             (component, ticks)
         }
